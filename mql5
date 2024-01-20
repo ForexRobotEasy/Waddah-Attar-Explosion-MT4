@@ -1,0 +1,116 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                 Waddah Attar Explosion MT4.mq5   |
+//|                             Developed by Forex Robot Easy Team    |
+//|                                      www.forexroboteasy.com      |
+//+------------------------------------------------------------------+
+
+// Define necessary input parameters
+input int SignalPeriod = 10;
+input double BuyThreshold = 0.5;
+input double SellThreshold = -0.5;
+
+// Initialize global variables
+double trendPowerBuffer[];
+double explosionPowerBuffer[];
+
+//+------------------------------------------------------------------+
+//|                             Custom Indicator Functions           |
+//+------------------------------------------------------------------+
+
+// Calculate trend power based on Waddah Attar Explosion formula
+void CalculateTrendPower(int bar)
+{
+    double trendPower = High[bar] - Low[bar];
+    trendPowerBuffer[bar] = trendPower;
+}
+
+// Calculate explosion power based on Waddah Attar Explosion formula
+void CalculateExplosionPower(int bar)
+{
+    double explosionPower = Close[bar] - Open[bar];
+    explosionPowerBuffer[bar] = explosionPower;
+}
+
+//+------------------------------------------------------------------+
+//|                        Trading Robot Functions                    |
+//+------------------------------------------------------------------+
+
+// Check for buy signal
+bool IsBuySignal(int bar)
+{
+    if (explosionPowerBuffer[bar] > BuyThreshold)
+    {
+        return true;
+    }
+    
+    return false;
+}
+
+// Check for sell signal
+bool IsSellSignal(int bar)
+{
+    if (explosionPowerBuffer[bar] < SellThreshold)
+    {
+        return true;
+    }
+    
+    return false;
+}
+
+// Check for exit buy signal
+bool IsExitBuySignal(int bar)
+{
+    if (explosionPowerBuffer[bar] < 0)
+    {
+        return true;
+    }
+    
+    return false;
+}
+
+// Check for exit sell signal
+bool IsExitSellSignal(int bar)
+{
+    if (explosionPowerBuffer[bar] > 0)
+    {
+        return true;
+    }
+    
+    return false;
+}
+
+//+------------------------------------------------------------------+
+//|                              OnTick Function                      |
+//+------------------------------------------------------------------+
+
+void OnTick()
+{
+    int bar = Bars - 1;
+    
+    // Calculate trend power and explosion power for the current bar
+    CalculateTrendPower(bar);
+    CalculateExplosionPower(bar);
+    
+    // Check for buy, sell, exit buy, and exit sell signals
+    if (IsBuySignal(bar))
+    {
+        // Execute buy trade setup
+        // ...
+    }
+    else if (IsSellSignal(bar))
+    {
+        // Execute sell trade setup
+        // ...
+    }
+    else if (IsExitBuySignal(bar))
+    {
+        // Execute exit buy trade setup
+        // ...
+    }
+    else if (IsExitSellSignal(bar))
+    {
+        // Execute exit sell trade setup
+        // ...
+    }
+}
